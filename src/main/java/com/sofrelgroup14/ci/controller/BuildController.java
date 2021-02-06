@@ -13,21 +13,22 @@ import com.sofrelgroup14.ci.models.Logs;
 import com.sofrelgroup14.ci.repositories.LogsRepository;
 import org.bson.types.ObjectId;
 import java.util.List;
+import java.time.Instant;
 
 @RestController
-@RequestMapping("/logs")
-public class LogsController {
+@RequestMapping("/build")
+public class BuildController {
+    
     @Autowired
     private LogsRepository repository;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Logs> getAllLogs() {
-        return repository.findAll();
-    }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Logs getLogById(@PathVariable("id") ObjectId id) {
-        return repository.findBy_id(id);
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public Logs buildAndCreateLog() {
+        Logs log = new Logs(ObjectId.get(), true, "great job", Instant.now());
+        repository.save(log);
+        return log;
+
     }
 
 }
