@@ -31,16 +31,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.json/json -->
-		<!-- https://mvnrepository.com/artifact/org.json/json/20201115 -->
-		<!-- https://stackoverflow.com/a/5245881 -->
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20201115</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>

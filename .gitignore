@@ -35,6 +35,3 @@ src/main/resources/static/
 .vscode/
 
 /src/main/resources/application.properties
-
-### Mac OS ###
-.DS_Store

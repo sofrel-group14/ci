@@ -10,7 +10,6 @@ import java.time.Instant;
 public class Logs {
   @Id
   private ObjectId _id;
-  private String commitHash;
   private boolean buildSuccess;
   private String buildResult;
   private Instant timestamp;
@@ -18,10 +17,9 @@ public class Logs {
   // Constructors
   public Logs() {}
   
-  public Logs(ObjectId _id, String commitHash, boolean buildSuccess, String buildResult, Instant timestamp) {
+  public Logs(ObjectId _id, boolean buildSucess, String buildResult,Instant timestamp) {
     this._id = _id;
-    this.commitHash = commitHash;
-    this.buildSuccess = buildSuccess;
+    this.buildSuccess = buildSucess;
     this.buildResult = buildResult;
     this.timestamp = timestamp;
   }
@@ -29,12 +27,9 @@ public class Logs {
   // ObjectId needs to be converted to string
   public String get_id() { return _id.toHexString(); }
   public void set_id(ObjectId _id) { this._id = _id; }
-
-  public String getCommitHash() { return commitHash; }
-  public void setCommitHash(String commitHash) { this.commitHash = commitHash; }
   
-  public boolean getBuildSuccess() { return buildSuccess; }
-  public void setBuildSuccess(boolean buildSuccess) { this.buildSuccess = buildSuccess; }
+  public boolean getBuildSucess() { return buildSuccess; }
+  public void setBuildSucess(boolean buildSuccess) { this.buildSuccess = buildSuccess; }
 
   public String getBuildResults() { return buildResult; }
   public void setBuildResults(String buildResult) { this.buildResult = buildResult; }
