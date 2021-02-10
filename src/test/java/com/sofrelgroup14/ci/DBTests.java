@@ -19,6 +19,7 @@ import java.time.Instant;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.AfterEach;
 @SpringBootTest(properties = {
+    "spring.data.mongodb.uri=mongodb+srv://hacker2:uxxJhiq5XsorfJkc@cluster0.ma6od.mongodb.net/logs?retryWrites=true&w=majority",
     "spring.data.mongodb.database=test_logs"
 })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
