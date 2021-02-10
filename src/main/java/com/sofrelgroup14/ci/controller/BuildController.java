@@ -169,6 +169,7 @@ public class BuildController {
             if (!jobID.equals("pending") && jobID.length() != 0) {
                 body.put("target_url", "http://axelelmarsson.se/logs/" + jobID);
             }
+            body.put("description", "Our CI Server");
             // Job status
             body.put("state", status);
     
