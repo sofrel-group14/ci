@@ -144,6 +144,12 @@ public class BuildController {
 
     private void sendStatus(String status, String commitHash, String jobID) {
         try {
+            // Abort if no access token.
+            if (System.getenv("GH_ACCESS_TOKEN") == null) {
+                System.out.println("NO GH_ACCES_TOKEN DEFINED. WON'T NOTIFY GITHUB ABOUT BUILD STATUS.");
+                return;
+            };
+
             // https://www.baeldung.com/java-http-request
             // https://www.baeldung.com/httpurlconnection-post
             URL url = new URL("https://api.github.com/repos/sofrel-group14/ci/statuses/" + commitHash);
