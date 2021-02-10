@@ -61,7 +61,7 @@ const App = () => {
                 {/* Ordered by lastname A-Z */}
                 Written by <a href="https://github.com/elmaxe" target="_blank" rel="noopener noreferrer">Axel Elmarsson</a>
                 , <a href="#" target="_blank" rel="noopener noreferrer">Telo Johar</a>,
-                , <a href="#" target="_blank" rel="noopener noreferrer">Andreas Kärrby</a>
+                , <a href="https://github.com/andreaskth" target="_blank" rel="noopener noreferrer">Andreas Kärrby</a>
                 , <a href="#" target="_blank" rel="noopener noreferrer">Yannis Paetzelt</a>{" "}
                 and <a href="#" target="_blank" rel="noopener noreferrer">Adeeb Syed Shah</a> for
                 the course <a href="https://www.kth.se/student/kurser/kurs/DD2480" target="_blank" rel="noopener noreferrer"><i>DD2480 Software Engineering Fundamentals</i></a> in 2021</p>
