@@ -129,34 +129,4 @@ public class BuildController {
             e.printStackTrace();
         }
     }
-
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String testRunCmd() {
-
-        // TODO: Set commit status to 'pending'
-        try {
-            String branchName = "development"; // TODO: Extract from JSON via webhooks (available in "ref": "refs/heads/webhooks-playground")
-            // Could be useful to save time and space: '--single-branch' ("Clone only the history leading to the tip of a single branch, either specified by the --branch option or the primary branch remote's HEAD points at.")
-            ProcessBuilder pbClone = new ProcessBuilder(
-              "git", "clone", "-b", branchName, "https://github.com/sofrel-group14/decide.git", "repo");
-            pbClone.start();
-
-            ProcessBuilder pbMvnVerify = new ProcessBuilder(
-              "mvn", "verify", "--file", "repo/pom.xml");
-
-            File f = new File("output.txt");
-            //System.out.println(f.getAbsolutePath()); // '.../assignments/2/ci/test-output.txt'
-
-            pbMvnVerify.redirectOutput(ProcessBuilder.Redirect.appendTo(f)); // TODO: Send output to db instead of log-file
-            pbMvnVerify.start();
-
-            // TODO: Remove repo
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "done";
-    }
-
 }
