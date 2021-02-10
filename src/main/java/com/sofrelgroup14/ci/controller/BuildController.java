@@ -18,6 +18,8 @@ import org.bson.types.ObjectId;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.time.Instant;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 /**
  * Rest controller for the /build-endpoint, invoked by the
@@ -65,7 +67,7 @@ public class BuildController {
      * @param body The HTTP POST request body.
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void buildAndCreateLog(@RequestBody String body) {
+    public ResponseEntity<String> buildAndCreateLog(@RequestBody String body) {
 
         // TODO (notification): Set commit status to 'pending'
 
@@ -123,8 +125,16 @@ public class BuildController {
             ProcessBuilder pbRmRepo = new ProcessBuilder("rm", "-R", "-f", "repo");
             pbRmRepo.start().waitFor(); // Start process and block this program thread until process has finished.
 
+            return ResponseEntity.status(buildSuccess == true ? 200 : 500).body("Build completed. Build " + (buildSuccess == true ? "succeeded" : "failed"));
+
         } catch (Exception e) {
             e.printStackTrace();
+            // https://stackoverflow.com/questions/1149703/how-can-i-convert-a-stack-trace-to-a-string
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            String sStackTrace = sw.toString();
+            return ResponseEntity.status(500).body(sStackTrace);
         }
     }
 }
