@@ -146,22 +146,25 @@ public class BuildController {
         try {
             // https://www.baeldung.com/java-http-request
             // https://www.baeldung.com/httpurlconnection-post
-            URL url = new URL("http://api.github.com/repos/sofrel-group14/ci/statuses/" + commitHash);
+            URL url = new URL("https://api.github.com/repos/sofrel-group14/ci/statuses/" + commitHash);
     
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setDoOutput(true);
             con.setRequestMethod("POST");
             con.setRequestProperty("Accept", "application/vnd.github.v3+json");
+            // Generate a token at https://github.com/settings/tokens/new and give it the correct access rights
+            // I think it is workflow/repo
+            con.setRequestProperty("Authorization", "token " + System.getenv("GH_ACCESS_TOKEN"));
     
             // Put arguments to JSON body
             JSONObject body = new JSONObject();
-            // Job status
-            body.put("state", status);
             // Link to resulting job. Only append if status is not pending or nonzero id.
             // TODO: Make linking to pretty frontend possible
             if (!jobID.equals("pending") && jobID.length() != 0) {
                 body.put("target_url", "http://axelelmarsson.se/logs/" + jobID);
             }
+            // Job status
+            body.put("state", status);
     
             // Send body
             DataOutputStream os = new DataOutputStream(con.getOutputStream());
