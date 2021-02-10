@@ -108,12 +108,10 @@ public class BuildController {
             }
             String buildOutput = sb.toString();
 
-            p.waitFor();
-            int val = p.exitValue();
-            System.out.println("val: " + val);
-
-            // TODO (notification): Set buildSuccess to true or false depending on build output.
-            boolean buildSuccess = true;
+            // See if build was successful
+            p.waitFor(); // Wait until process is finished
+            int val = p.exitValue(); // 0 if success, error code otherwise
+            boolean buildSuccess = (val == 0) ? true : false;
 
             // Save output to database
             Logs log = new Logs(ObjectId.get(), commitHash, buildSuccess, buildOutput, Instant.now());
