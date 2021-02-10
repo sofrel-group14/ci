@@ -24,7 +24,6 @@ const App = () => {
             return res.json()
         })
         .then(json => {
-            console.log(json)
             // Sort data, latest first
             json = json.sort((a, b) => {
                 let ad = new Date(a.timestamp)
