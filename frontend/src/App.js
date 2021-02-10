@@ -18,7 +18,7 @@ const App = () => {
         // Used when error on fetch
         let response
 
-        fetch("http://localhost:8080/logs")
+        fetch("/logs")
         .then(res => {
             response = res
             return res.json()
