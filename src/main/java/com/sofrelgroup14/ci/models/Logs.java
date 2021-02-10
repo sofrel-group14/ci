@@ -17,9 +17,9 @@ public class Logs {
   // Constructors
   public Logs() {}
   
-  public Logs(ObjectId _id, boolean buildSucess, String buildResult,Instant timestamp) {
+  public Logs(ObjectId _id, boolean buildSuccess, String buildResult, Instant timestamp) {
     this._id = _id;
-    this.buildSuccess = buildSucess;
+    this.buildSuccess = buildSuccess;
     this.buildResult = buildResult;
     this.timestamp = timestamp;
   }
@@ -28,8 +28,8 @@ public class Logs {
   public String get_id() { return _id.toHexString(); }
   public void set_id(ObjectId _id) { this._id = _id; }
   
-  public boolean getBuildSucess() { return buildSuccess; }
-  public void setBuildSucess(boolean buildSuccess) { this.buildSuccess = buildSuccess; }
+  public boolean getBuildSuccess() { return buildSuccess; }
+  public void setBuildSuccess(boolean buildSuccess) { this.buildSuccess = buildSuccess; }
 
   public String getBuildResults() { return buildResult; }
   public void setBuildResults(String buildResult) { this.buildResult = buildResult; }
