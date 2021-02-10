@@ -1,0 +1,28 @@
+@import url(https://use.fontawesome.com/releases/v5.1.0/css/all.css);
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap');
+
+html {
+  background-color: #f9f9f9;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+.pretty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

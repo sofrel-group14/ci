@@ -1,0 +1,50 @@
+.Expandable {
+    width: 90%;
+    margin: 5px;
+    background-color: white;
+}
+
+.Expandable .bar {
+    font-size: 1.3em;
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    max-width: inherit;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+    border-radius: 2px;
+    border: 1px solid #eee;
+    font-weight: bold;
+    user-select: none;
+}
+
+.Expandable .bar span {
+    width: auto;
+}
+
+.Expandable .bar span.time {
+    margin-left: 0;
+}
+
+.Expandable .bar span.arrow {
+    margin-left: 0;
+    position: relative;
+}
+
+.Expandable .content {
+    padding: 20px;
+    white-space: pre-wrap;
+    color: #e1e4e8;
+    background-color: #24292e;
+    font-family: 'Inconsolata', monospace;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+}
+
+@media screen and (max-width: 700px) {
+    .Expandable {
+        width: 100%;
+    }
+
+    .Expandable .bar {
+        font-size: 1em;
+    }
+}
