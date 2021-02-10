@@ -20,6 +20,9 @@ import java.util.List;
 import java.time.Instant;
 import java.io.StringWriter;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.io.DataOutputStream;
 
 /**
  * Rest controller for the /build-endpoint, invoked by the
@@ -67,9 +70,7 @@ public class BuildController {
      * @param body The HTTP POST request body.
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<String> buildAndCreateLog(@RequestBody String body) {
-
-        // TODO (notification): Set commit status to 'pending'
+    public void buildAndCreateLog(@RequestBody String body) {
 
         String ref;
         String commitHash = ""; // Remove error: "commitHash may not have been initialized"
@@ -89,6 +90,10 @@ public class BuildController {
         } catch (JSONException e){
             e.printStackTrace();
         }
+
+        // TODO (notification): Set commit status to 'pending'
+
+        sendStatus("pending", commitHash, "");  
 
         // Clone repo, run mvn verify, post output to db, remove repo
         // ProcessBuilder:s have to be wrapped in try-catch block.
@@ -116,7 +121,9 @@ public class BuildController {
             boolean buildSuccess = (val == 0) ? true : false;
 
             // Save output to database
-            Logs log = new Logs(ObjectId.get(), commitHash, buildSuccess, buildOutput, Instant.now());
+            ObjectId _id = ObjectId.get();
+            System.out.println(_id.toString());
+            Logs log = new Logs(_id, commitHash, buildSuccess, buildOutput, Instant.now());
             repository.save(log);
 
             // TODO (notification): Set commit status depending on success (or not) of build
@@ -124,17 +131,58 @@ public class BuildController {
             // Remove repo (-R for directory, -f to skip prompt "are you sure?")
             ProcessBuilder pbRmRepo = new ProcessBuilder("rm", "-R", "-f", "repo");
             pbRmRepo.start().waitFor(); // Start process and block this program thread until process has finished.
-
-            return ResponseEntity.status(buildSuccess == true ? 200 : 500).body("Build completed. Build " + (buildSuccess == true ? "succeeded" : "failed"));
+            
+            sendStatus(buildSuccess == true ? "success" : "failure", commitHash, _id.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
-            // https://stackoverflow.com/questions/1149703/how-can-i-convert-a-stack-trace-to-a-string
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
-            String sStackTrace = sw.toString();
-            return ResponseEntity.status(500).body(sStackTrace);
+            // Server crashed or something :(
+            sendStatus("failure", commitHash, ""); 
+        }
+    }
+
+
+    private void sendStatus(String status, String commitHash, String jobID) {
+        try {
+            // https://www.baeldung.com/java-http-request
+            // https://www.baeldung.com/httpurlconnection-post
+            URL url = new URL("http://api.github.com/repos/sofrel-group14/ci/statuses/" + commitHash);
+    
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Accept", "application/vnd.github.v3+json");
+    
+            // Put arguments to JSON body
+            JSONObject body = new JSONObject();
+            // Job status
+            body.put("state", status);
+            // Link to resulting job. Only append if status is not pending or nonzero id.
+            // TODO: Make linking to pretty frontend possible
+            if (!jobID.equals("pending") && jobID.length() != 0) {
+                body.put("target_url", "http://axelelmarsson.se/logs/" + jobID);
+            }
+    
+            // Send body
+            DataOutputStream os = new DataOutputStream(con.getOutputStream());
+            byte[] input = body.toString().getBytes("utf-8");
+            System.out.println(con);
+            System.out.println(body.toString());
+            os.write(input, 0, input.length);
+            os.close();
+            
+            BufferedReader in = new BufferedReader(
+                                    new InputStreamReader(
+                                        con.getInputStream()));
+            String decodedString;
+            while ((decodedString = in.readLine()) != null) {
+                System.out.println(decodedString);
+            }
+            in.close();
+            con.disconnect();
+                    
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
