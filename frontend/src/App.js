@@ -18,13 +18,12 @@ const App = () => {
         // Used when error on fetch
         let response
 
-        fetch("http://localhost:8080/logs")
+        fetch("/logs")
         .then(res => {
             response = res
             return res.json()
         })
         .then(json => {
-            console.log(json)
             // Sort data, latest first
             json = json.sort((a, b) => {
                 let ad = new Date(a.timestamp)
