@@ -18,6 +18,11 @@ import org.bson.types.ObjectId;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.time.Instant;
+import java.io.StringWriter;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.io.DataOutputStream;
 
 /**
  * Rest controller for the /build-endpoint, invoked by the
@@ -67,8 +72,6 @@ public class BuildController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void buildAndCreateLog(@RequestBody String body) {
 
-        // TODO (notification): Set commit status to 'pending'
-
         String ref;
         String commitHash = ""; // Remove error: "commitHash may not have been initialized"
         String branchName = ""; // -||-
@@ -88,6 +91,8 @@ public class BuildController {
             e.printStackTrace();
         }
 
+        sendStatus("pending", commitHash, "");  
+
         // Clone repo, run mvn verify, post output to db, remove repo
         // ProcessBuilder:s have to be wrapped in try-catch block.
         try {
@@ -96,7 +101,7 @@ public class BuildController {
             pbClone.start().waitFor(); // Start process and block this program thread until process has finished.
 
             ProcessBuilder pbMvnVerify = new ProcessBuilder(
-              "mvn", "verify", "--file", "repo/pom.xml");
+              "mvn", "verify", "-B", "--file", "repo/pom.xml");
             Process p = pbMvnVerify.start();
 
             // Gather Maven-output (i.e. build output) to string (source: https://stackoverflow.com/a/16714180)
@@ -114,15 +119,79 @@ public class BuildController {
             boolean buildSuccess = (val == 0) ? true : false;
 
             // Save output to database
-            Logs log = new Logs(ObjectId.get(), commitHash, buildSuccess, buildOutput, Instant.now());
+            ObjectId _id = ObjectId.get();
+            System.out.println(_id.toString());
+            Logs log = new Logs(_id, commitHash, buildSuccess, buildOutput, Instant.now());
             repository.save(log);
-
-            // TODO (notification): Set commit status depending on success (or not) of build
 
             // Remove repo (-R for directory, -f to skip prompt "are you sure?")
             ProcessBuilder pbRmRepo = new ProcessBuilder("rm", "-R", "-f", "repo");
             pbRmRepo.start().waitFor(); // Start process and block this program thread until process has finished.
+            
+            sendStatus(buildSuccess == true ? "success" : "failure", commitHash, _id.toString());
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Server crashed or something :(
+            sendStatus("failure", commitHash, ""); 
+        }
+    }
+
+
+    /**
+     * This function sends a notification to Github with information about the build progress and status.
+     * @param status the build status. "pending", "success" or "failure".
+     * @param commitHash the commit the build job belongs to
+     * @param jobID The Mongo id of the log object.
+     */
+    private void sendStatus(String status, String commitHash, String jobID) {
+        try {
+            // Abort if no access token.
+            if (System.getenv("GH_ACCESS_TOKEN") == null) {
+                System.out.println("NO GH_ACCESS_TOKEN DEFINED. WON'T NOTIFY GITHUB ABOUT BUILD STATUS.");
+                return;
+            };
+
+            // https://www.baeldung.com/java-http-request
+            // https://www.baeldung.com/httpurlconnection-post
+            URL url = new URL("https://api.github.com/repos/sofrel-group14/ci/statuses/" + commitHash);
+    
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Accept", "application/vnd.github.v3+json");
+            // Generate a token at https://github.com/settings/tokens/new and give it the correct access rights
+            // I think it is workflow/repo
+            con.setRequestProperty("Authorization", "token " + System.getenv("GH_ACCESS_TOKEN"));
+    
+            // Put arguments to JSON body
+            JSONObject body = new JSONObject();
+            // Link to resulting job. Only append if status is not pending or nonzero id.
+            // TODO: Make linking to pretty frontend possible
+            if (!jobID.equals("pending") && jobID.length() != 0) {
+                body.put("target_url", "http://axelelmarsson.se#" + commitHash);
+            }
+            body.put("description", "Our CI Server");
+            // Job status
+            body.put("state", status);
+    
+            // Send body
+            DataOutputStream os = new DataOutputStream(con.getOutputStream());
+            byte[] input = body.toString().getBytes("utf-8");
+            os.write(input, 0, input.length);
+            os.close();
+            
+            BufferedReader in = new BufferedReader(
+                                    new InputStreamReader(
+                                        con.getInputStream()));
+            String decodedString;
+            System.out.println("Response from Github:")
+            while ((decodedString = in.readLine()) != null) {
+                System.out.println(decodedString);
+            }
+            in.close();
+            con.disconnect();
+                    
         } catch (Exception e) {
             e.printStackTrace();
         }
