@@ -61,7 +61,7 @@ const App = () => {
                 Written by <a href="https://github.com/elmaxe" target="_blank" rel="noopener noreferrer">Axel Elmarsson</a>
                 , <a href="#" target="_blank" rel="noopener noreferrer">Telo Johar</a>,
                 , <a href="https://github.com/andreaskth" target="_blank" rel="noopener noreferrer">Andreas Kärrby</a>
-                , <a href="#" target="_blank" rel="noopener noreferrer">Yannis Paetzelt</a>{" "}
+                , <a href="https://github.com/K2017" target="_blank" rel="noopener noreferrer">Yannis Paetzelt</a>{" "}
                 and <a href="#" target="_blank" rel="noopener noreferrer">Adeeb Syed Shah</a> for
                 the course <a href="https://www.kth.se/student/kurser/kurs/DD2480" target="_blank" rel="noopener noreferrer"><i>DD2480 Software Engineering Fundamentals</i></a> in 2021</p>
             <p><a href="https://github.com/sofrel-group14/ci" target="_blank" rel="noopener noreferrer"><img src={Github} style={{width: "20px"}}/></a></p>
