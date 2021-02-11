@@ -14,16 +14,18 @@ public class Logs {
   private boolean buildSuccess;
   private String buildResult;
   private Instant timestamp;
-  
+  private String branchName;
+
   // Constructors
   public Logs() {}
   
-  public Logs(ObjectId _id, String commitHash, boolean buildSuccess, String buildResult, Instant timestamp) {
+  public Logs(ObjectId _id, String commitHash, boolean buildSuccess, String buildResult, Instant timestamp, String branchName) {
     this._id = _id;
     this.commitHash = commitHash;
     this.buildSuccess = buildSuccess;
     this.buildResult = buildResult;
     this.timestamp = timestamp;
+    this.branchName = branchName;
   }
   
   // ObjectId needs to be converted to string
@@ -42,4 +44,6 @@ public class Logs {
   public Instant getTimestamp() { return timestamp; }
   public void setTimestamp(Instant timestamp){ this.timestamp = timestamp; }
 
+  public String getBranchName() { return branchName; }
+  public void setBranchName(String branchName) { this.branchName = branchName; }
 }
