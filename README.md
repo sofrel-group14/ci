@@ -15,6 +15,21 @@ A continuous integration server that supports:
 * running tests
 * notifying users of results
 
+## How it works
+
+### Compilation and testing
+
+The application clones the branch that was pushed to, and uses Maven to compile, build, and run tests:
+```
+git clone -b <branch-name> https://github.com/sofrel-group14/ci.git repo
+mvn verify --file repo/pom.xml
+```
+and then deletes the repo (runs `rm -Rf repo`) after saving the build output to the database.
+
+### Notification
+
+To notify users of results, it sets the [commit status](https://docs.github.com/en/rest/reference/repos#statuses) of the last commit in the pushed branch to be `success` or `failure`, depending on the build success reported by Maven. This is done via GitHub's [REST API](https://docs.github.com/en/rest/reference/repos#create-a-commit-status).
+
 ## How to build
 
 You need an access token to your account with the correct permissions to be able to notify Github about the build status: https://github.com/settings/tokens/new
