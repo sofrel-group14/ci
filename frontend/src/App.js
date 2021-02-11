@@ -76,7 +76,7 @@ const App = () => {
 }
 
 // Component used to render each log
-const Expandable = ({timestamp = "", buildSuccess, commitHash = "", buildResults = "", startOpen = false, id}) => {
+const Expandable = ({timestamp = "", buildSuccess, commitHash = "", buildResults = "", startOpen = false, id, branchName = ""}) => {
     const [open, toggleOpen] = useState(startOpen)
 
     const scroll = _ => {
@@ -107,6 +107,9 @@ const Expandable = ({timestamp = "", buildSuccess, commitHash = "", buildResults
                 >
                     {commitHash && commitHash.substring(0, 7)}
                 </a>
+            </span>
+            <span>
+                {branchName}
             </span>
             <span>
             {buildSuccess == true ?

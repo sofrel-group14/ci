@@ -121,7 +121,7 @@ public class BuildController {
             // Save output to database
             ObjectId _id = ObjectId.get();
             System.out.println(_id.toString());
-            Logs log = new Logs(_id, commitHash, buildSuccess, buildOutput, Instant.now());
+            Logs log = new Logs(_id, commitHash, buildSuccess, buildOutput, Instant.now(), branchName);
             repository.save(log);
 
             // Remove repo (-R for directory, -f to skip prompt "are you sure?")
