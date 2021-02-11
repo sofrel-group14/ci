@@ -1,7 +1,7 @@
 # Continuous Integration Server
 
 A continuous integration server written in Java. The server is implemented as a REST API with a frontend which can be found 
-[here](http://axelelmarsson.se). The REST API was implemented using Spring Boot and we made the builds persistant using MongoDB. The MongoDB is hosted on MongoDB Atlas. There currently exist 3 enpoints:
+[here](http://axelelmarsson.se). The REST API was implemented using Spring Boot and we made the builds persistant using MongoDB. The MongoDB database is hosted locally on a Server. The entire project is hosted on a Raspberry Pi. There currently exist 3 enpoints:
 
 1. /logs - which contains all the builds that have been pushed to CI Server
 2. /log/{id} - Which Contains the details of a specific build.
@@ -33,7 +33,7 @@ mvn spring-boot:run
 1. Uses Java (JDK 15) with Maven as build system and JUnit for testing.
 2. Uses Spring Boot as a way to serve the builds/logs.
 3. Uses MongoDB for persistance storage of the builds/logs.
-4. Uses MongoDB Atlas as a hosting platform for the MongoDB database.
+4. Raspberry Pi as a server
 
 
 <!-- Add more info here later when we know if we use for example Spring Boot, MongoDB, etc. -->
