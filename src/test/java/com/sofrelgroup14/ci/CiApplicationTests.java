@@ -16,6 +16,7 @@ class CiApplicationTests {
 	@Test
 	void contextLoads() {
 		assertThat(controller).isNotNull(); // Source: https://spring.io/guides/gs/testing-web/
+		// This line is a placeholder
 		assertThat(true).isTrue();
 	}
 }
