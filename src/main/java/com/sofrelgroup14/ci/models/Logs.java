@@ -7,9 +7,15 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.schema.IdentifiableJsonSchemaProperty.TimestampJsonSchemaProperty;
 import java.time.Instant;
 
+/**
+ * This object defines a Model that we save to the database.
+ */
 public class Logs {
+  /**
+   * ObjectID is similar to primary key ID
+   */
   @Id
-  private ObjectId _id;
+  private ObjectId _id; 
   private String commitHash;
   private boolean buildSuccess;
   private String buildResult;
