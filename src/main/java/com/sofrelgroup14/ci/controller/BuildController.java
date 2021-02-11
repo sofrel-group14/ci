@@ -91,8 +91,6 @@ public class BuildController {
             e.printStackTrace();
         }
 
-        // TODO (notification): Set commit status to 'pending'
-
         sendStatus("pending", commitHash, "");  
 
         // Clone repo, run mvn verify, post output to db, remove repo
@@ -126,8 +124,6 @@ public class BuildController {
             Logs log = new Logs(_id, commitHash, buildSuccess, buildOutput, Instant.now());
             repository.save(log);
 
-            // TODO (notification): Set commit status depending on success (or not) of build
-
             // Remove repo (-R for directory, -f to skip prompt "are you sure?")
             ProcessBuilder pbRmRepo = new ProcessBuilder("rm", "-R", "-f", "repo");
             pbRmRepo.start().waitFor(); // Start process and block this program thread until process has finished.
@@ -142,11 +138,17 @@ public class BuildController {
     }
 
 
+    /**
+     * This function sends a notification to Github with information about the build progress and status.
+     * @param status the build status. "pending", "success" or "failure".
+     * @param commitHash the commit the build job belongs to
+     * @param jobID The Mongo id of the log object.
+     */
     private void sendStatus(String status, String commitHash, String jobID) {
         try {
             // Abort if no access token.
             if (System.getenv("GH_ACCESS_TOKEN") == null) {
-                System.out.println("NO GH_ACCES_TOKEN DEFINED. WON'T NOTIFY GITHUB ABOUT BUILD STATUS.");
+                System.out.println("NO GH_ACCESS_TOKEN DEFINED. WON'T NOTIFY GITHUB ABOUT BUILD STATUS.");
                 return;
             };
 
@@ -167,7 +169,7 @@ public class BuildController {
             // Link to resulting job. Only append if status is not pending or nonzero id.
             // TODO: Make linking to pretty frontend possible
             if (!jobID.equals("pending") && jobID.length() != 0) {
-                body.put("target_url", "http://axelelmarsson.se/logs/" + jobID);
+                body.put("target_url", "http://axelelmarsson.se#" + commitHash);
             }
             body.put("description", "Our CI Server");
             // Job status
@@ -176,8 +178,6 @@ public class BuildController {
             // Send body
             DataOutputStream os = new DataOutputStream(con.getOutputStream());
             byte[] input = body.toString().getBytes("utf-8");
-            System.out.println(con);
-            System.out.println(body.toString());
             os.write(input, 0, input.length);
             os.close();
             
@@ -185,6 +185,7 @@ public class BuildController {
                                     new InputStreamReader(
                                         con.getInputStream()));
             String decodedString;
+            System.out.println("Response from Github:")
             while ((decodedString = in.readLine()) != null) {
                 System.out.println(decodedString);
             }
