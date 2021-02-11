@@ -96,7 +96,7 @@ public class BuildController {
             pbClone.start().waitFor(); // Start process and block this program thread until process has finished.
 
             ProcessBuilder pbMvnVerify = new ProcessBuilder(
-              "mvn", "verify", "--file", "repo/pom.xml");
+              "mvn", "verify", "-B", "--file", "repo/pom.xml");
             Process p = pbMvnVerify.start();
 
             // Gather Maven-output (i.e. build output) to string (source: https://stackoverflow.com/a/16714180)
