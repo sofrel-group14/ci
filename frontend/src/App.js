@@ -43,7 +43,7 @@ const App = () => {
     }, [true])
 
   return (
-    <div className="pretty">
+    <div className="pretty" style={{marginBottom: "100px"}}>
         <h1>Build logs</h1>
         {!fetching && <h3>Showing {builds.length} logs</h3>}
         {fetching ?
@@ -52,17 +52,22 @@ const App = () => {
             (error.length != 0 ?
                 <div style={{color: "red"}}>{error}</div>
                 :
-                builds.map(x => <Expandable {...x} key={x._id}/>)    
+                builds.map((x,i) => {
+
+                    return (
+                        <Expandable id={x.commitHash} {...x} key={x._id} startOpen={window.location.hash.split("#")[1] === x.commitHash ? true : false}/>
+                    )
+                })
             )
         }
         <footer>
             <p>
                 {/* Ordered by lastname A-Z */}
                 Written by <a href="https://github.com/elmaxe" target="_blank" rel="noopener noreferrer">Axel Elmarsson</a>
-                , <a href="#" target="_blank" rel="noopener noreferrer">Telo Johar</a>,
+                , <a href="https://github.com/teljoh" target="_blank" rel="noopener noreferrer">Telo Johar</a>
                 , <a href="https://github.com/andreaskth" target="_blank" rel="noopener noreferrer">Andreas Kärrby</a>
                 , <a href="https://github.com/K2017" target="_blank" rel="noopener noreferrer">Yannis Paetzelt</a>{" "}
-                and <a href="#" target="_blank" rel="noopener noreferrer">Adeeb Syed Shah</a> for
+                and <a href="https://github.com/Internet-Person-IP " target="_blank" rel="noopener noreferrer">Adeeb Syed Shah</a> for
                 the course <a href="https://www.kth.se/student/kurser/kurs/DD2480" target="_blank" rel="noopener noreferrer"><i>DD2480 Software Engineering Fundamentals</i></a> in 2021</p>
             <p><a href="https://github.com/sofrel-group14/ci" target="_blank" rel="noopener noreferrer"><img src={Github} style={{width: "20px"}}/></a></p>
         </footer>
@@ -71,17 +76,25 @@ const App = () => {
 }
 
 // Component used to render each log
-const Expandable = ({timestamp = "", buildSuccess, commitHash = "", buildResults = ""}) => {
+const Expandable = ({timestamp = "", buildSuccess, commitHash = "", buildResults = "", startOpen = false, id}) => {
+    const [open, toggleOpen] = useState(startOpen)
 
-    const [open, toggleOpen] = useState(false)
+    const scroll = _ => {
+        let elem = document.getElementById(id);
+        elem.scrollIntoView();
+    }
+
+    useEffect(_ => {
+        scroll()
+    }, [window.location.hash])
 
     return (
-    <div className="Expandable" >
+    <div className="Expandable" onClick={_ => toggleOpen(!open)} style={{cursor: "pointer"}} id={id}>
         <div className="bar">
-            <span className="arrow" onClick={_ => toggleOpen(!open)} style={{cursor: "pointer"}}>
+            <span className="arrow">
                 <i className="fas fa-chevron-down" style={open ? {transform: "rotate(180deg)"} : {}}></i>
             </span>
-            <span className="time" onClick={_ => toggleOpen(!open)} style={{cursor: "pointer"}}>
+            <span className="time" >
                 <Moment format="DD MMM YYYY kk:mm:ss">{timestamp}</Moment>
             </span>
             <span>
@@ -90,6 +103,7 @@ const Expandable = ({timestamp = "", buildSuccess, commitHash = "", buildResults
                     target="_blank"
                     rel="noopener noreferrer"
                     title={commitHash ? (`https://github.com/sofrel-group14/ci/commit/${commitHash}`) : ""}
+                    onClick={e => e.stopPropagation()}
                 >
                     {commitHash && commitHash.substring(0, 7)}
                 </a>
