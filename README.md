@@ -1,6 +1,12 @@
 # Continuous Integration Server
 
-A continuous integration server written in Java.
+A continuous integration server written in Java. The server is implemented as a REST API with a frontend which can be found 
+[here](http://axelelmarsson.se). The REST API was implemented using Spring Boot and we made the builds persistant using MongoDB. The MongoDB database is hosted locally on a Server. The entire project is hosted on a Raspberry Pi. There currently exist 3 enpoints:
+
+1. /logs - which contains all the builds that have been pushed to CI Server
+2. /log/{id} - Which Contains the details of a specific build.
+3. /build - which is used by the webhook to build and test a specific branch
+
 <!-- Add more info here later when we know if we use for example Spring Boot, MongoDB, etc. -->
 
 # What it is
@@ -15,18 +21,29 @@ A continuous integration server that supports:
 
 ```
 git clone git@github.com:sofrel-group14/ci.git
-some other command...
+
+#create a application.properties file in src/main/resources with appropriate properties for your mongoDB database
+
+mvn spring-boot:run
+
 ```
 
 ## Tools used
 
-Uses Java (JDK 15) with Maven as build system and JUnit for testing.
+1. Uses Java (JDK 15) with Maven as build system and JUnit for testing.
+2. Uses Spring Boot as a way to serve the builds/logs.
+3. Uses MongoDB for persistance storage of the builds/logs.
+4. Raspberry Pi as a server
+
+
 <!-- Add more info here later when we know if we use for example Spring Boot, MongoDB, etc. -->
 
 ### Necessary downloads
 
 1. [Download JDK 15](https://www.oracle.com/se/java/technologies/javase-downloads.html)
-2. [Download Maven](https://maven.apache.org/download.cgi) ([installation instructions](https://maven.apache.org/install.html))
+2. Possibly [MongoDB](https://www.mongodb.com/try/download/community) if you prefer running it locally
+
+
 
 # How to contribute
 
@@ -118,8 +135,8 @@ Fixes: #6
 * Prefer several smaller unit tests over few but large tests.
 
 # Statement of contribution
-*To be filled in later*
+Taqui and Yannis created the base for the REST API including Spring Boot and MongoDB integration. Taqui and Telo started with the test for the DB and the CI flow. Andreas worked on the main CI features which is compiling the code and running tests. Axel worked on the frontend and a way to notify the users of the results. 
 
 ## What we're proud of
-*To be filled in later*
+We are really proud of our frontend since it quite good looking and gives a clear way to check builds. Also, we estimate that >90% of our branch names, commit messages etc. are consistent with the conventions in the README.
 
