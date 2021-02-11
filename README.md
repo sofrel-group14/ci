@@ -17,12 +17,16 @@ A continuous integration server that supports:
 
 ## How to build
 
-**TODO:** Add info on how to build.
+You need an access token to your account with the correct permissions to be able to notify Github about the build status: https://github.com/settings/tokens/new
 
 ```
 git clone git@github.com:sofrel-group14/ci.git
 
 #create a application.properties file in src/main/resources with appropriate properties for your mongoDB database
+
+cd frontend && npm install && npm run build
+
+export GH_ACCESS_TOKEN=a token from github with the github actions permission, 
 
 mvn spring-boot:run
 
@@ -33,7 +37,8 @@ mvn spring-boot:run
 1. Uses Java (JDK 15) with Maven as build system and JUnit for testing.
 2. Uses Spring Boot as a way to serve the builds/logs.
 3. Uses MongoDB for persistance storage of the builds/logs.
-4. Raspberry Pi as a server
+4. React for a pretty frontend.
+5. Raspberry Pi as a server.
 
 
 <!-- Add more info here later when we know if we use for example Spring Boot, MongoDB, etc. -->
@@ -42,7 +47,7 @@ mvn spring-boot:run
 
 1. [Download JDK 15](https://www.oracle.com/se/java/technologies/javase-downloads.html)
 2. Possibly [MongoDB](https://www.mongodb.com/try/download/community) if you prefer running it locally
-
+3. [NPM](https://github.com/nvm-sh/nvm)
 
 
 # How to contribute
