@@ -118,6 +118,8 @@ public class BuildController {
             repository.save(log);
 
             // TODO (notification): Set commit status depending on success (or not) of build
+            
+            System.out.println("Response from Github:");
 
             // Remove repo (-R for directory, -f to skip prompt "are you sure?")
             ProcessBuilder pbRmRepo = new ProcessBuilder("rm", "-R", "-f", "repo");
