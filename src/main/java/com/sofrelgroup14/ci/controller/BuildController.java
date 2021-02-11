@@ -185,7 +185,7 @@ public class BuildController {
                                     new InputStreamReader(
                                         con.getInputStream()));
             String decodedString;
-            System.out.println("Response from Github:")
+            System.out.println("Response from Github:");
             while ((decodedString = in.readLine()) != null) {
                 System.out.println(decodedString);
             }
