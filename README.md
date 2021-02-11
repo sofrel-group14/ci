@@ -59,9 +59,6 @@ Each public class and method has to be [documented](https://www.monperrus.net/ma
 
 Issues should be categorized using the existing labels (bug, documentation, enhancement, etc.).
 
-~~They should also immediately be linked to the DECIDE project board (specifically the backlog column, i.e. the one chosen by default), so that they are visible there as well.~~  
-**NOTE:** Since we didn't really use the DECIDE-board last assignment, a few of us discussed that maybe it just adds extra unnecessary overhead. Though, if some of you want to use it we can of course do so, in that case we will remove the strikethrough. When we all agree, we will either remove this part altogether or remove the strikethrough.
-
 **IMPORTANT**: Assign yourself to an issue before you start working on it. This is to avoid having two or more people accidentally doing "double work". Make sure to coordinate with the assignee of an issue before starting to work on it yourself.
 
 ## Commits
