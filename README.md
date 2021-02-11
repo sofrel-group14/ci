@@ -18,6 +18,10 @@ git clone git@github.com:sofrel-group14/ci.git
 some other command...
 ```
 
+## How to test
+
+Change to the same directory as the file pom.xml. Then run the command `mvn test`.
+
 ## Tools used
 
 Uses Java (JDK 15) with Maven as build system and JUnit for testing.
