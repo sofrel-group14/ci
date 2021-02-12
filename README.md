@@ -32,6 +32,10 @@ mvn spring-boot:run
 
 ```
 
+## How to test
+
+Change to the same directory as the file pom.xml. Then run the command `mvn test`.
+
 ## Tools used
 
 1. Uses Java (JDK 15) with Maven as build system and JUnit for testing.
